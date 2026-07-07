@@ -1,29 +1,44 @@
-import { useState, useEffect, useCallback } from 'react';
+//impoerting Custom Hooks
+import { useState, useEffect } from 'react';
 
-const useFetch = (url) => {
-  const [data, setData] = useState(null);
+function useFetch(url) {
+
+  //this stores the fetched data
+  const [data, setData] = useState([]);
+
+  //for loading when data is being fetched
   const [loading, setLoading] = useState(true);
+
+  //store the error message
   const [error, setError] = useState(null);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
+  
+  useEffect(() => {
+
+    //This function will get data from API
+    async  function fetchData(){
+      setLoading(true);   //starts loading
+
+      //error handelling 
+      try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error(`Error ${response.status}`);
+      //check if the request was successful
+      if (!response.ok) {
+         throw new Error("failed to fetch");
+      } 
       const result = await response.json();
       setData(result);
-    } catch (err) {
+      } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
+      }
+
+      setLoading(false);  //stops loading after the request is completed
+      
     }
-  }, [url]);
+    fetchData();
+  },[url]);
 
-  useEffect(() => {
-    if (url) fetchData();
-  }, [url, fetchData]);
-
+  //here returning these values so that photogallery file can use them
   return { data, loading, error };
 };
 

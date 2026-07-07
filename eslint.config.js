@@ -1,3 +1,5 @@
+// ESLint configuration file is created by Vite for this React project and is not flagged.
+
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
